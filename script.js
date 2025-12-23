@@ -1,28 +1,51 @@
-function addNum(a, b) {
-    return a + b;
-}
-console.log(addNum(5, 10));
-function arrayLee(arr) {
-    return arr.length;
-}
-console.log(arrayLee([1, 2, 3, 4, 5]));
+let items = [];
 
-function evenNum(num) {
-  return num % 2 === 0;
-}
-console.log(evenNum(4));
-console.log(evenNum(7));
+const taskInput = document.querySelector(".taskInput");
+const taskBtn = document.querySelector(".taskBtn");
+const taskList = document.querySelector(".task");
 
-function localVar() {
-  let message = "Hello, World!";
-  return message;
-}
-console.log(localVar()); 
+function createTask(text, isCompleted = false) {
+  const li = document.createElement("li");
+  li.classList.add("taskItem");
+  if (isCompleted) li.classList.add("completed");
 
-let globalMessage = "This is a global variable.";
+  const label = document.createElement("span");
+  label.textContent = text;
 
-function globalVar() {
-  return globalMessage;
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "❌";
+  deleteBtn.classList.add("deleteBtn");
+
+  // Toggle complete when clicking the text
+  label.addEventListener("click", () => {
+    li.classList.toggle("completed");
+  });
+
+  // Delete task
+  deleteBtn.addEventListener("click", () => {
+    li.remove();
+  });
+
+  li.appendChild(label);
+  li.appendChild(deleteBtn);
+  taskList.appendChild(li);
 }
-console.log(globalVar());
-console.log(globalMessage);
+
+function handleAdd() {
+  const text = taskInput.value.trim();
+  if (text === "") return;
+
+  createTask(text);
+  items.push(text);
+
+  taskInput.value = "";
+  taskInput.focus();
+}
+
+// Button click
+taskBtn.addEventListener("click", handleAdd);
+
+// Enter key in input
+taskInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") handleAdd();
+});
